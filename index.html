@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Companion Consultants | Biodiversity | Thailand</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@400;600&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Sarabun', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                        num: ['Inter', 'sans-serif'],
+                        thai: ['"Noto Sans Thai"', 'sans-serif'], 
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#0F392B',   /* Deep Forest Green */
+                            darker: '#061C15',
+                            light: '#E6F0EB',
+                            gold: '#C5A065',   /* Gold Accent */
+                            sand: '#F5F5F0',
+                            slate: '#334155',
+                            sage: '#8DA399'
+                        }
+                    },
+                    backgroundImage: {
+                        'hero-pattern': "linear-gradient(to right, rgba(6, 28, 21, 0.8), rgba(15, 57, 43, 0.5)), url('https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=2000&auto=format&fit=crop')",
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(15, 57, 43, 0.08)',
+                        'gold-glow': '0 0 15px rgba(197, 160, 101, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #F5F5F0; }
+        body { transition: font-family 0.2s ease; }
+        
+        body.lang-th { font-family: 'Noto Sans Thai', sans-serif; }
+        body.lang-th .font-serif, body.lang-th h1, body.lang-th h2, body.lang-th h3 { 
+            font-family: 'Noto Sans Thai', sans-serif !important; 
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #C5A065;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
+        
+        .hover-lift {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -8px rgba(15, 57, 43, 0.15);
+        }
+        .lang-active {
+            font-weight: 700;
+            color: #C5A065;
+            border-bottom: 2px solid #C5A065;
+        }
+    </style>
+</head>
+<body class="text-slate-700 antialiased selection:bg-brand-dark selection:text-brand-gold lang-th">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md border-b border-brand-dark/5 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-24">
+                <!-- Logo -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <img src="logo.png" alt="Eco Companion Consultants" class="h-16 w-auto object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                    
+                    <!-- Fallback (Green Text) -->
+                    <div class="hidden flex-col" id="logo-fallback">
+                        <span class="font-serif font-bold text-xl text-brand-dark tracking-wide leading-none uppercase">Eco Companion</span>
+                        <span class="text-[10px] text-brand-gold font-bold tracking-[0.1em] uppercase mt-1">Consultants</span>
+                    </div>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex space-x-8 items-center">
+                    <a href="#about" class="nav-link text-sm font-medium text-brand-dark hover:text-brand-gold transition" data-i18n="nav_about">About</a>
+                    <a href="#services" class="nav-link text-sm font-medium text-brand-dark hover:text-brand-gold transition" data-i18n="nav_services">Solutions</a>
+                    <a href="#insights" class="nav-link text-sm font-medium text-brand-dark hover:text-brand-gold transition" data-i18n="nav_insights">Insights</a>
+                    
+                    <div class="flex items-center gap-3 text-xs font-medium border-l border-slate-200 pl-6">
+                        <button onclick="changeLanguage('th')" id="btn-th" class="px-1 hover:text-brand-gold transition lang-active">TH</button>
+                        <span class="text-slate-300">/</span>
+                        <button onclick="changeLanguage('en')" id="btn-en" class="px-1 hover:text-brand-gold transition">EN</button>
+                    </div>
+
+                    <a href="#contact" class="bg-brand-dark text-white border border-brand-dark px-6 py-2.5 rounded-sm text-sm font-medium hover:bg-brand-gold hover:border-brand-gold hover:text-brand-dark transition duration-300 shadow-md flex items-center gap-2">
+                        <span data-i18n="nav_book">Book Consultation</span>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative h-screen min-h-[750px] flex flex-col justify-center bg-hero-pattern bg-cover bg-center bg-no-repeat bg-fixed">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full mt-10">
+            <div class="max-w-4xl fade-up animate-fade-in-up">
+                <div class="inline-flex items-center gap-3 mb-8 bg-white/10 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/20">
+                    <span class="w-2 h-2 bg-brand-gold rounded-full animate-pulse"></span>
+                    <span class="text-brand-gold text-xs font-bold tracking-widest uppercase font-sans">Connect for Environmental Sharing</span>
+                </div>
+                
+                <h1 class="font-serif text-5xl lg:text-7xl font-bold text-white leading-[1.1] mb-8" data-i18n="hero_title">
+                    Turn Nature Risks into <br/>
+                    <span class="text-brand-gold italic">Strategic Assets.</span>
+                </h1>
+                
+                <p class="text-lg lg:text-xl text-gray-300 mb-10 max-w-2xl font-light leading-relaxed" data-i18n="hero_desc">
+                    ที่ปรึกษาเฉพาะทางด้านความหลากหลายทางชีวภาพ เราผสานวิทยาศาสตร์เข้ากับกลยุทธ์ทางธุรกิจ เพื่อเปลี่ยน "ภาระ" ให้เป็น "ความยั่งยืน" ที่วัดผลได้จริง
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                    <a href="#services" class="bg-brand-gold text-brand-dark px-8 py-4 rounded-sm font-bold text-lg hover:bg-white transition duration-300 shadow-gold-glow text-center min-w-[180px]" data-i18n="btn_explore">
+                        Explore Services
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-brand-sand">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16">
+                <div class="max-w-2xl">
+                    <h2 class="font-serif text-4xl font-bold text-brand-dark mb-4" data-i18n="about_title">Science-Based. <br/><span class="italic text-brand-gold">Business-Aligned.</span></h2>
+                    <p class="text-slate-600 text-lg font-light" data-i18n="about_desc">
+                        เราไม่ใช่แค่นักวิชาการ แต่คือ "Companion" ที่เข้าใจบริบทธุรกิจ เราทำงานร่วมกับเครือข่ายผู้เชี่ยวชาญเพื่อส่งมอบข้อมูลที่แม่นยำที่สุด
+                    </p>
+                </div>
+                <div class="hidden md:block">
+                     <a href="#contact" class="text-brand-dark font-bold border-b border-brand-dark hover:text-brand-gold hover:border-brand-gold transition pb-1" data-i18n="about_link">Learn about our values</a>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-[200px]">
+                <div class="md:col-span-2 lg:col-span-2 row-span-2 bg-brand-dark text-white p-8 rounded-sm relative overflow-hidden group hover-lift">
+                    <img src="https://images.unsplash.com/photo-1596788066342-941178c88720?auto=format&fit=crop&w=800&q=80" class="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-30 transition">
+                    <div class="h-full flex flex-col justify-between relative z-10">
+                        <div>
+                            <span class="text-brand-gold text-xs font-bold uppercase tracking-widest">Core Value</span>
+                            <h3 class="font-serif text-3xl mt-2" data-i18n="value1_title">De-Risking Projects</h3>
+                        </div>
+                        <p class="text-brand-light/90 text-lg leading-relaxed" data-i18n="value1_desc">
+                            เราช่วยค้นหา Red flags ทางระบบนิเวศตั้งแต่ระยะเริ่มต้น เพื่อป้องกันปัญหาความล่าช้าทางกฎหมาย
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-sm shadow-soft flex flex-col justify-center items-center text-center hover-lift border border-slate-100">
+                    <span class="font-num text-4xl font-bold text-brand-gold">100%</span>
+                    <span class="text-sm text-slate-500 mt-2">EIA Approved Rate</span>
+                </div>
+
+                <div class="bg-brand-sage/20 p-6 rounded-sm flex flex-col justify-between hover-lift border border-brand-sage/30">
+                    <i data-lucide="microscope" class="w-8 h-8 text-brand-dark"></i>
+                    <div>
+                        <h4 class="font-bold text-brand-dark">QA/QC Protocol</h4>
+                        <p class="text-xs text-slate-600 mt-1" data-i18n="qa_desc">Field sampling standards aligned with global research.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-sm shadow-soft flex flex-col justify-center items-center text-center hover-lift border border-slate-100">
+                    <span class="font-num text-4xl font-bold text-brand-gold">15k+</span>
+                    <span class="text-sm text-slate-500 mt-2">Species Records</span>
+                </div>
+
+                <div class="md:col-span-2 bg-white p-8 rounded-sm shadow-soft flex items-center justify-between hover-lift border border-slate-100">
+                    <div>
+                        <h4 class="font-serif text-2xl text-brand-dark mb-2" data-i18n="partner_title">Partner Network</h4>
+                        <p class="text-slate-600 text-sm max-w-xs" data-i18n="partner_desc">ทำงานร่วมกับผู้เชี่ยวชาญเฉพาะทางจากมหาวิทยาลัยชั้นนำ</p>
+                    </div>
+                    <div class="flex -space-x-4">
+                        <div class="w-16 h-16 rounded-full border-4 border-white bg-slate-200 overflow-hidden"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" class="w-full h-full object-cover"></div>
+                        <div class="w-16 h-16 rounded-full border-4 border-white bg-slate-300 overflow-hidden"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100" class="w-full h-full object-cover"></div>
+                        <div class="w-16 h-16 rounded-full border-4 border-white bg-brand-light flex items-center justify-center text-brand-dark font-bold text-sm">+20</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Overview -->
+    <section id="services" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-4 gap-12">
+                <div class="lg:col-span-1 space-y-8">
+                    <div>
+                        <h2 class="font-serif text-3xl font-bold text-brand-dark mb-4" data-i18n="services_header">Our Services</h2>
+                        <p class="text-slate-500 text-sm leading-relaxed mb-6" data-i18n="services_desc">
+                            ครอบคลุมตลอดวัฏจักรโครงการ ตั้งแต่การประเมินความเสี่ยง ไปจนถึงการฟื้นฟูและสร้างการมีส่วนร่วม
+                        </p>
+                        <a href="EcoCompanion_Service_Catalog.html" class="text-brand-dark text-sm font-bold border-b border-brand-dark pb-1 hover:text-brand-gold hover:border-brand-gold transition flex items-center w-fit group">
+                            <span data-i18n="view_catalog">View Full Service Catalog</span> <i data-lucide="arrow-right" class="w-4 h-4 ml-2 group-hover:translate-x-1 transition"></i>
+                        </a>
+                    </div>
+                    
+                    <div class="space-y-2 sticky top-24">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2" data-i18n="filter_cat">Filter by Category</p>
+                        <button onclick="filterServices('all')" class="cat-btn w-full text-left px-4 py-3 rounded-sm text-sm font-medium transition-all bg-brand-dark text-brand-gold shadow-md" data-cat="all">All Solutions</button>
+                        <button onclick="filterServices('A')" class="cat-btn w-full text-left px-4 py-3 rounded-sm text-sm font-medium transition-all text-slate-600 hover:bg-brand-light" data-cat="A">Assess (Risk & Baseline)</button>
+                        <button onclick="filterServices('B')" class="cat-btn w-full text-left px-4 py-3 rounded-sm text-sm font-medium transition-all text-slate-600 hover:bg-brand-light" data-cat="B">Plan (Strategy & Design)</button>
+                        <button onclick="filterServices('C')" class="cat-btn w-full text-left px-4 py-3 rounded-sm text-sm font-medium transition-all text-slate-600 hover:bg-brand-light" data-cat="C">Monitor (MRV)</button>
+                        <button onclick="filterServices('D')" class="cat-btn w-full text-left px-4 py-3 rounded-sm text-sm font-medium transition-all text-slate-600 hover:bg-brand-light" data-cat="D">Digitize (Data)</button>
+                        <button onclick="filterServices('E')" class="cat-btn w-full text-left px-4 py-3 rounded-sm text-sm font-medium transition-all text-slate-600 hover:bg-brand-light" data-cat="E">Engage (Community)</button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-3">
+                    <div id="service-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Insights Preview -->
+    <section id="insights" class="py-24 bg-brand-darker text-white border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-end mb-12">
+                <div>
+                    <span class="text-brand-gold text-xs font-bold uppercase tracking-widest block mb-2" data-i18n="knowledge_hub">Knowledge Hub</span>
+                    <h2 class="font-serif text-3xl font-bold" data-i18n="latest_insights">Latest Insights</h2>
+                </div>
+                <a href="EcoCompanion_Blog.html" class="text-white/70 hover:text-white text-sm flex items-center gap-2"><span data-i18n="view_all">View all articles</span> <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Highlight Case Study (AP Project Link) -->
+                <a href="EcoCompanion_Blog.html" class="group cursor-pointer block">
+                    <div class="aspect-video bg-slate-800 rounded-sm overflow-hidden mb-4 relative">
+                        <img src="https://media.readthecloud.co/wp-content/uploads/2024/11/18141446/sustainability-ap-thai-22.webp" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition duration-500">
+                        <div class="absolute top-4 left-4 bg-brand-gold text-brand-dark px-2 py-1 text-[10px] font-bold uppercase">Featured Case</div>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold mb-2 group-hover:text-brand-gold transition" data-i18n="featured_title">Pocket Forest by AP: Urban Biodiversity</h3>
+                    <p class="text-white/60 text-sm line-clamp-2" data-i18n="featured_desc">Transforming urban green spaces into functional micro-habitats.</p>
+                </a>
+
+                <a href="EcoCompanion_Blog.html" class="group cursor-pointer block">
+                    <div class="aspect-video bg-slate-800 rounded-sm overflow-hidden mb-4 relative">
+                        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition duration-500">
+                        <div class="absolute top-4 left-4 bg-white text-brand-dark px-2 py-1 text-[10px] font-bold uppercase">Guide</div>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold mb-2 group-hover:text-brand-gold transition">Navigating TNFD: A Starter Guide</h3>
+                    <p class="text-white/60 text-sm line-clamp-2">สรุปขั้นตอนการเตรียมความพร้อมสำหรับการเปิดเผยข้อมูลด้านธรรมชาติ...</p>
+                </a>
+
+                <a href="EcoCompanion_Blog.html" class="group cursor-pointer block">
+                    <div class="aspect-video bg-slate-800 rounded-sm overflow-hidden mb-4 relative">
+                        <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition duration-500">
+                        <div class="absolute top-4 left-4 bg-brand-dark border border-brand-gold text-brand-gold px-2 py-1 text-[10px] font-bold uppercase">Trend</div>
+                    </div>
+                    <h3 class="font-serif text-xl font-bold mb-2 group-hover:text-brand-gold transition">Why "Nature Positive" is the new Net Zero</h3>
+                    <p class="text-white/60 text-sm line-clamp-2">ทำไมเป้าหมายด้านคาร์บอนอย่างเดียวไม่เพียงพออีกต่อไป...</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section id="contact" class="py-24 bg-brand-sand">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-sm shadow-xl border border-slate-200 overflow-hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    <!-- Contact Info -->
+                    <div class="bg-brand-dark text-white p-12 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80')] opacity-20 bg-cover bg-center"></div>
+                        <div class="relative z-10 h-full flex flex-col justify-between">
+                            <div>
+                                <h2 class="font-serif text-3xl font-bold mb-6" data-i18n="contact_title">Let's start the conversation.</h2>
+                                <p class="text-brand-light/70 text-lg font-light mb-8" data-i18n="contact_desc">
+                                    พร้อมเป็นเพื่อนร่วมทางในการจัดการความเสี่ยงและโอกาสด้านธรรมชาติของโครงการคุณ ปรึกษาเบื้องต้นฟรีไม่มีค่าใช้จ่าย
+                                </p>
+                                <ul class="space-y-6">
+                                    <li class="flex items-start gap-4">
+                                        <div class="w-10 h-10 bg-brand-gold/20 rounded-sm flex items-center justify-center flex-shrink-0">
+                                            <i data-lucide="map-pin" class="w-5 h-5 text-brand-gold"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-brand-gold text-sm uppercase">Head Office</h4>
+                                            <p class="text-sm text-brand-light/80 mt-1">
+                                                393/321 Sukhumvit St., Bangna,<br>
+                                                Bangkok, 10260 Thailand
+                                            </p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start gap-4">
+                                        <div class="w-10 h-10 bg-brand-gold/20 rounded-sm flex items-center justify-center flex-shrink-0">
+                                            <i data-lucide="mail" class="w-5 h-5 text-brand-gold"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-brand-gold text-sm uppercase">Email</h4>
+                                            <p class="text-sm text-brand-light/80 mt-1">consultants.ecc@gmail.com</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start gap-4">
+                                        <div class="w-10 h-10 bg-brand-gold/20 rounded-sm flex items-center justify-center flex-shrink-0">
+                                            <i data-lucide="phone" class="w-5 h-5 text-brand-gold"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-brand-gold text-sm uppercase">Phone</h4>
+                                            <p class="text-sm text-brand-light/80 mt-1">+66 96-159-4541</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <div class="p-12 bg-white">
+                        <h3 class="font-serif text-2xl font-bold text-brand-dark mb-6" data-i18n="form_title">Send us a message</h3>
+                        
+                        <form action="#" method="POST" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="label_name">Your Name</label>
+                                    <input type="text" name="name" required class="w-full border-b border-slate-300 py-2 focus:outline-none focus:border-brand-gold transition bg-transparent placeholder-slate-300" placeholder="John Doe">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="label_email">Email Address</label>
+                                    <input type="email" name="email" required class="w-full border-b border-slate-300 py-2 focus:outline-none focus:border-brand-gold transition bg-transparent placeholder-slate-300" placeholder="john@company.com">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="label_topic">Topic</label>
+                                <select name="topic" class="w-full border-b border-slate-300 py-2 focus:outline-none focus:border-brand-gold transition bg-transparent text-slate-700">
+                                    <option>General Inquiry</option>
+                                    <option>Request Proposal</option>
+                                    <option>Partnership</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="label_message">Message</label>
+                                <textarea name="message" rows="4" required class="w-full border-b border-slate-300 py-2 focus:outline-none focus:border-brand-gold transition bg-transparent placeholder-slate-300 resize-none" placeholder="Tell us about your project..."></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full bg-brand-dark text-white py-4 rounded-sm font-bold shadow-lg hover:bg-brand-gold hover:text-brand-dark transition duration-300 flex justify-center items-center gap-2">
+                                <span data-i18n="btn_send">Send Message</span> <i data-lucide="send" class="w-4 h-4"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark text-white/40 py-8 text-center text-xs border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="mb-4">
+                <!-- Logo in Footer: White version -->
+                <img src="logo.png" alt="Eco Companion" class="h-10 w-auto brightness-0 invert mx-auto mb-2" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                <div class="hidden text-brand-gold font-bold uppercase tracking-widest text-sm" id="logo-fallback-footer">Eco Companion</div>
+            </div>
+            &copy; 2026 Eco Companion Consultants Co., Ltd. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // --- DATA & TRANSLATIONS ---
+        const translations = {
+            en: {
+                nav_about: "About",
+                nav_services: "Solutions",
+                nav_insights: "Insights",
+                nav_book: "Book Consultation",
+                hero_title: "Turn Nature Risks into <br/><span class='text-brand-gold italic'>Strategic Assets.</span>",
+                hero_desc: "Specialized biodiversity consultancy combining science with business strategy to turn 'burdens' into measurable 'sustainability'.",
+                btn_explore: "Explore Services",
+                trusted_text: "Trusted by leading firms",
+                trusted_label: "Trusted by",
+                about_title: "Science-Based. <br/><span class='italic text-brand-gold'>Business-Aligned.</span>",
+                about_desc: "We are not just academics, but your 'Companion' who understands business context. We work with expert networks (e.g., Mahidol Univ.) to ensure data accuracy.",
+                about_link: "Learn about our values",
+                value1_title: "De-Risking Projects",
+                value1_desc: "We identify ecosystem red flags early to prevent legal delays and community conflicts.",
+                qa_desc: "Field sampling standards aligned with global research.",
+                partner_title: "Partner Network",
+                partner_desc: "Collaborating with specialists from leading universities.",
+                services_header: "Our Services",
+                services_desc: "Covering the entire project lifecycle, from risk assessment to restoration and engagement.",
+                view_catalog: "View Full Service Catalog",
+                filter_cat: "Filter by Category",
+                knowledge_hub: "Knowledge Hub",
+                latest_insights: "Latest Insights",
+                view_all: "View all articles",
+                contact_title: "Let's start the conversation.",
+                contact_desc: "Ready to be your companion in managing nature risks and opportunities. Free initial consultation.",
+                form_title: "Send us a message",
+                label_name: "Your Name",
+                label_email: "Email Address",
+                label_topic: "Topic",
+                label_message: "Message",
+                btn_send: "Send Message",
+                privacy_note: "We respect your privacy. No spam.",
+                footer_desc: "Science-based biodiversity consultancy helping businesses navigate nature-related risks and opportunities.",
+                accreditation: "Accreditation",
+                quick_links: "Quick Links",
+                featured_title: "Pocket Forest by AP: Urban Biodiversity & Bird Habitat",
+                featured_desc: "Transforming urban green spaces into functional micro-habitats. A pioneering project by AP Thailand."
+            },
+            th: {
+                nav_about: "เกี่ยวกับเรา",
+                nav_services: "บริการ",
+                nav_insights: "บทความ",
+                nav_book: "นัดปรึกษาฟรี",
+                hero_title: "เปลี่ยนความเสี่ยงธรรมชาติ <br/><span class='text-brand-gold italic'>ให้เป็นกลยุทธ์ที่ยั่งยืน</span>",
+                hero_desc: "ที่ปรึกษาเฉพาะทางด้านความหลากหลายทางชีวภาพ เราผสานวิทยาศาสตร์เข้ากับกลยุทธ์ทางธุรกิจ เพื่อเปลี่ยน 'ภาระ' ให้เป็น 'ความยั่งยืน' ที่วัดผลได้จริง",
+                btn_explore: "ดูบริการของเรา",
+                trusted_text: "ได้รับความไว้วางใจจาก",
+                trusted_label: "ลูกค้าของเรา",
+                about_title: "หลักวิชาการแน่น <br/><span class='italic text-brand-gold'>ตอบโจทย์ธุรกิจจริง</span>",
+                about_desc: "เราไม่ใช่แค่นักวิชาการ แต่คือ 'Companion' ที่เข้าใจบริบทธุรกิจ เราทำงานร่วมกับเครือข่ายผู้เชี่ยวชาญ (เช่น มหิดล) เพื่อให้ได้ข้อมูลที่แม่นยำที่สุด",
+                about_link: "ดูค่านิยมของเรา",
+                value1_title: "ลดความเสี่ยงโครงการ",
+                value1_desc: "เราช่วยค้นหา Red flags ทางระบบนิเวศตั้งแต่ระยะเริ่มต้น เพื่อป้องกันปัญหาความล่าช้าทางกฎหมาย",
+                qa_desc: "มาตรฐานการเก็บตัวอย่างเทียบเท่าสากล",
+                partner_title: "เครือข่ายผู้เชี่ยวชาญ",
+                partner_desc: "ทำงานร่วมกับผู้เชี่ยวชาญเฉพาะทางจากมหาวิทยาลัยชั้นนำ",
+                services_header: "บริการของเรา",
+                services_desc: "ครอบคลุมตลอดวัฏจักรโครงการ ตั้งแต่การประเมินความเสี่ยง ไปจนถึงการฟื้นฟูและสร้างการมีส่วนร่วม",
+                view_catalog: "ดูรายละเอียดบริการทั้งหมด",
+                filter_cat: "เลือกตามหมวดหมู่",
+                knowledge_hub: "คลังความรู้",
+                latest_insights: "บทความล่าสุด",
+                view_all: "ดูบทความทั้งหมด",
+                contact_title: "เริ่มต้นพูดคุยกับเรา",
+                contact_desc: "พร้อมเป็นเพื่อนร่วมทางในการจัดการความเสี่ยงและโอกาสด้านธรรมชาติของโครงการคุณ ปรึกษาเบื้องต้นฟรีไม่มีค่าใช้จ่าย",
+                form_title: "ส่งข้อความถึงเรา",
+                label_name: "ชื่อของคุณ",
+                label_email: "อีเมล",
+                label_topic: "หัวข้อ",
+                label_message: "ข้อความ",
+                btn_send: "ส่งข้อความ",
+                privacy_note: "ข้อมูลของคุณจะถูกเก็บเป็นความลับ",
+                footer_desc: "ที่ปรึกษาด้านความหลากหลายทางชีวภาพบนพื้นฐานวิทยาศาสตร์ ช่วยธุรกิจจัดการความเสี่ยงและโอกาสทางธรรมชาติ",
+                accreditation: "การรับรองมาตรฐาน",
+                quick_links: "ลิงก์ด่วน",
+                featured_title: "หย่อมป่า โดย AP: พื้นที่ความหลากหลายทางชีวภาพและคุณภาพชีวิตของนก",
+                featured_desc: "เมื่ออสังหาฯ มองไกลถึงพื้นที่ความหลากหลายทางชีวภาพ... เปลี่ยนพื้นที่สีเขียวในเมืองให้เป็นบ้านที่แท้จริงของนก"
+            }
+        };
+
+        const services = [
+            { 
+                id: 'A1', cat: 'A', 
+                name: {en: 'Nature Risk Sprint', th: 'Nature Risk Sprint'}, 
+                desc: {en: 'Fast-track risk assessment (2 weeks) to identify red flags.', th: 'ประเมินความเสี่ยงเร่งด่วน (2 สัปดาห์) เพื่อระบุ Red Flags'} 
+            },
+            { 
+                id: 'A2', cat: 'A', 
+                name: {en: 'Biodiversity Baseline', th: 'Biodiversity Baseline'}, 
+                desc: {en: 'Expert-led field surveys for EIA and permitting.', th: 'สำรวจภาคสนามโดยผู้เชี่ยวชาญเพื่อ EIA และการขออนุญาต'} 
+            },
+            { 
+                id: 'B1', cat: 'B', 
+                name: {en: 'Management Plan (BMP)', th: 'Management Plan (BMP)'}, 
+                desc: {en: 'Actionable mitigation hierarchy and operational manuals.', th: 'แผนจัดการความหลากหลายทางชีวภาพและคู่มือปฏิบัติงาน'} 
+            },
+            { 
+                id: 'B2', cat: 'B', 
+                name: {en: 'Eco-Design Masterplan', th: 'Eco-Design Masterplan'}, 
+                desc: {en: 'Landscape design for functional ecosystem restoration.', th: 'ออกแบบภูมิทัศน์เพื่อฟื้นฟูระบบนิเวศให้สมบูรณ์'} 
+            },
+            { 
+                id: 'B3', cat: 'B', 
+                name: {en: 'TNFD Strategy', th: 'TNFD Strategy'}, 
+                desc: {en: 'Corporate readiness for nature-related disclosures.', th: 'เตรียมความพร้อมองค์กรสำหรับการเปิดเผยข้อมูลตามกรอบ TNFD'} 
+            },
+            { 
+                id: 'C1', cat: 'C', 
+                name: {en: 'Monitoring Retainer', th: 'Monitoring Retainer'}, 
+                desc: {en: 'Long-term tracking of biodiversity indicators.', th: 'ติดตามผลระยะยาวด้วยตัวชี้วัดทางชีวภาพ'} 
+            },
+            { 
+                id: 'D1', cat: 'D', 
+                name: {en: 'Bio-Database', th: 'Bio-Database'}, 
+                desc: {en: 'Digital asset management for nature data.', th: 'ระบบจัดการฐานข้อมูลดิจิทัลสำหรับข้อมูลธรรมชาติ'} 
+            },
+            { 
+                id: 'E1', cat: 'E', 
+                name: {en: 'Environmental Education', th: 'Environmental Education'}, 
+                desc: {en: 'Designing impactful learning curriculums.', th: 'ออกแบบหลักสูตรค่ายสิ่งแวดล้อมที่วัดผลได้จริง'} 
+            },
+            { 
+                id: 'E2', cat: 'E', 
+                name: {en: 'Corporate CSR Programs', th: 'Corporate CSR Programs'}, 
+                desc: {en: 'Creating meaningful CSR activities like citizen science.', th: 'กิจกรรม CSR นักวิทย์พลเมือง สร้างการมีส่วนร่วมพนักงาน'} 
+            },
+            { 
+                id: 'E3', cat: 'E', 
+                name: {en: 'Community Engage', th: 'Community Engage'}, 
+                desc: {en: 'Building social license through participation.', th: 'สร้างการยอมรับจากสังคมผ่านกระบวนการมีส่วนร่วม'} 
+            },
+             { 
+                id: 'E4', cat: 'E', 
+                name: {en: 'Signature Biodiversity Hub', th: 'Signature Biodiversity Hub'}, 
+                desc: {en: 'Design and operation of Nature Learning Centers.', th: 'ออกแบบและบริหารศูนย์เรียนรู้ธรรมชาติครบวงจร'} 
+            },
+            { 
+                id: 'C3', cat: 'C', 
+                name: {en: 'Carbon Credit Readiness', th: 'Carbon Credit Readiness'}, 
+                desc: {en: 'Feasibility screening and MRV design for carbon credits.', th: 'ประเมินความคุ้มค่าและวางระบบ MRV สำหรับ Carbon Credit'} 
+            },
+            { 
+                id: 'C4', cat: 'C', 
+                name: {en: 'Area-based Carbon Stock', th: 'Area-based Carbon Stock'}, 
+                desc: {en: 'Carbon stock estimation for any green area.', th: 'ประเมินการกักเก็บคาร์บอนในพื้นที่สีเขียวทุกรูปแบบ'} 
+            }
+        ];
+
+        let currentLang = 'th';
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            
+            // Toggle UI
+            document.getElementById('btn-th').classList.remove('lang-active', 'text-slate-400');
+            document.getElementById('btn-en').classList.remove('lang-active', 'text-slate-400');
+            
+            document.getElementById(`btn-${lang}`).classList.add('lang-active');
+            document.getElementById(`btn-${lang === 'th' ? 'en' : 'th'}`).classList.add('text-slate-400');
+
+            // Font Class
+            if (lang === 'th') {
+                document.body.classList.remove('lang-en');
+                document.body.classList.add('lang-th');
+            } else {
+                document.body.classList.remove('lang-th');
+                document.body.classList.add('lang-en');
+            }
+
+            // Static Text
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+
+            // Re-render content
+            renderContent();
+        }
+
+        function filterContent(cat) {
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                b.classList.remove('active', 'bg-brand-dark', 'text-white');
+                if(b.dataset.cat === cat) {
+                    b.classList.add('active', 'bg-brand-dark', 'text-white');
+                }
+            });
+            renderContent(cat);
+        }
+
+        function filterServices(cat) {
+            // Update Button Styles
+            document.querySelectorAll('.cat-btn').forEach(b => {
+                b.classList.remove('bg-brand-dark', 'text-brand-gold', 'shadow-md');
+                b.classList.add('text-slate-600', 'hover:bg-slate-50');
+                if(b.dataset.cat === cat) {
+                    b.classList.remove('text-slate-600', 'hover:bg-slate-50');
+                    b.classList.add('bg-brand-dark', 'text-brand-gold', 'shadow-md');
+                }
+            });
+
+            const filtered = cat === 'all' ? services : services.filter(s => s.cat === cat);
+            const grid = document.getElementById('service-grid');
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-2 text-center text-slate-400 py-10 italic border border-dashed border-slate-200 rounded-sm">No services found in this category.</div>`;
+                return;
+            }
+
+            // Render with Current Language
+            grid.innerHTML = filtered.map(s => `
+                <div class="bg-brand-light p-6 rounded-sm border border-transparent hover:border-brand-gold/30 hover:bg-white transition duration-300 group cursor-pointer hover:shadow-soft animate-fade-in-up">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-[10px] font-bold text-brand-dark uppercase tracking-widest border border-brand-dark/10 px-2 py-1 bg-white rounded-sm">${s.id}</span>
+                        <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition shadow-sm">
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-brand-gold"></i>
+                        </div>
+                    </div>
+                    <h4 class="font-serif font-bold text-brand-dark text-xl mb-2 group-hover:text-brand-gold transition">${s.name[currentLang]}</h4>
+                    <p class="text-sm text-slate-500 font-light leading-relaxed">${s.desc[currentLang]}</p>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function renderContent() {
+             // This function is placeholder in this specific file as filterServices does the main job for the service grid.
+             // But if there were dynamic content sections (like blog previews), they would be updated here.
+             // Re-calling filterServices to update the grid with new language
+             const activeBtn = document.querySelector('.cat-btn.bg-brand-dark');
+             const activeCat = activeBtn ? activeBtn.getAttribute('data-cat') : 'all';
+             filterServices(activeCat);
+        }
+
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            changeLanguage('th');
+            // renderContent('all'); // Removed as it is redundant/undefined in this scope, logic moved to filterServices inside changeLanguage
+        });
+    </script>
+</body>
+</html>
